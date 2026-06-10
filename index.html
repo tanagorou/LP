@@ -498,21 +498,64 @@
     document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
   })();
 
-  /* CTA -> GA event -> thanks modal */
+  /* CTA -> GA event -> thanks modal / one click only */
   (function(){
     var modal = document.getElementById('thanksModal');
-    function openModal(){ modal.classList.add('open'); document.body.style.overflow='hidden'; }
-    function closeModal(){ modal.classList.remove('open'); document.body.style.overflow=''; }
+    var CTA_STORAGE_KEY = 'studyhub_cta_clicked';
+
+    function openModal(){
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(){
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function disableAllCtaButtons(){
+      document.querySelectorAll('.btn-cta').forEach(function(btn){
+        btn.disabled = true;
+        btn.setAttribute('aria-disabled', 'true');
+        btn.textContent = '送信済み';
+      });
+    }
+
+    // すでに押したことがある場合は、ページ再読み込み後も押せないようにする
+    if (localStorage.getItem(CTA_STORAGE_KEY) === 'true') {
+      disableAllCtaButtons();
+    }
+
     document.querySelectorAll('.btn-cta').forEach(function(btn){
       btn.addEventListener('click', function(){
-        var loc = btn.getAttribute('data-cta');
-        if(typeof gtag === 'function'){ gtag('event', 'want_to_use_click', { 'button_location': loc }); }
+        if (localStorage.getItem(CTA_STORAGE_KEY) === 'true') {
+          return;
+        }
+
+        var loc = btn.getAttribute('data-cta') || 'unknown';
+
+        // 二重クリック防止
+        localStorage.setItem(CTA_STORAGE_KEY, 'true');
+        disableAllCtaButtons();
+
+        // Google AnalyticsにCTAクリックイベントを送信
+        if (typeof gtag === 'function') {
+          gtag('event', 'want_to_use_click', {
+            button_location: loc
+          });
+        }
+
         openModal();
       });
     });
+
     document.getElementById('modalClose').addEventListener('click', closeModal);
-    modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
-    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+    modal.addEventListener('click', function(e){
+      if(e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeModal();
+    });
   })();
 
   /* email pre-registration -> Formspree (AJAX) -> inline success */
