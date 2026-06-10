@@ -82,7 +82,24 @@
   }
   .logo{width:34px;height:34px;border-radius:9px;flex:none;display:block;
     box-shadow:0 4px 12px var(--shadow-blue);}
-  .logo-name{font-weight:700;font-size:18px;letter-spacing:.01em;color:var(--ink);}
+  .logo-name{font-weight:700;font-size:17px;letter-spacing:.01em;color:var(--ink);white-space:nowrap;}
+
+  /* header sub button — completely separate from .btn-cta */
+  .btn-nav{
+    appearance:none;cursor:pointer;font-family:inherit;
+    margin-left:auto;flex:none;white-space:nowrap;
+    font-weight:700;font-size:13px;letter-spacing:.02em;color:var(--blue);
+    background:var(--paper);border:1px solid rgba(46,111,214,.4);
+    padding:8px 16px;border-radius:999px;
+    box-shadow:0 4px 12px -6px var(--shadow-blue);
+    transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .btn-nav:hover{background:var(--tint);transform:translateY(-1px);box-shadow:0 7px 16px -6px var(--shadow-blue);}
+  .btn-nav:active{transform:translateY(1px);}
+  @media (max-width:359px){
+    .logo-name{font-size:15px;}
+    .btn-nav{padding:7px 12px;font-size:12px;}
+  }
 
   /* ---------- buttons ---------- */
   .btn-cta{
@@ -97,6 +114,12 @@
   .btn-cta:hover{transform:translateY(-3px);box-shadow:0 20px 38px -10px rgba(35,96,196,.66), inset 0 1px 0 rgba(255,255,255,.4);filter:brightness(1.04);}
   .btn-cta:active{transform:translateY(1px) scale(.985);box-shadow:0 7px 16px -8px rgba(35,96,196,.6), inset 0 1px 0 rgba(255,255,255,.35);}
   .btn-cta svg{width:18px;height:18px;}
+  .btn-cta:disabled{
+    cursor:default;pointer-events:none;
+    background:#b9c6da;color:#fff;filter:none;transform:none;
+    box-shadow:0 6px 14px -10px rgba(35,96,196,.3), inset 0 1px 0 rgba(255,255,255,.25);
+  }
+  .closing .btn-cta:disabled{background:rgba(255,255,255,.55);color:rgba(35,96,196,.55);}
   .cta-note{display:block;margin-top:13px;color:var(--ink-mute);font-size:12.5px;}
 
   /* ---------- hero ---------- */
@@ -238,6 +261,13 @@
   }
   .pre-form input[type=email]::placeholder{color:#9aa6bb;}
   .pre-form input[type=email]:focus{box-shadow:0 0 0 4px rgba(255,255,255,.28);}
+  /* gentle one-shot highlight when arriving via the header nav button */
+  .pre-form input[type=email].flash{animation:fieldGlow 1.6s ease;}
+  @keyframes fieldGlow{
+    0%,100%{box-shadow:0 8px 20px -12px rgba(0,0,0,.3);}
+    35%{box-shadow:0 0 0 6px rgba(255,213,138,.55);}
+    70%{box-shadow:0 0 0 3px rgba(255,213,138,.3);}
+  }
   .pre-form button[type=submit]{
     appearance:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:16px;
     color:var(--blue-deep);background:#ffd58a;border:none;border-radius:13px;padding:16px;
@@ -312,6 +342,7 @@
   <div class="site-inner">
     <img class="logo" src="assets/logo.png" alt="StudyHub アイコン" />
     <span class="logo-name">StudyHub</span>
+    <button class="btn-nav" id="navPreRegister" type="button">事前登録</button>
   </div>
 </header>
 
@@ -321,12 +352,9 @@
 <!-- ===== hero ===== -->
 <section class="hero">
   <div class="wrap">
-    <span class="live-badge"><span class="live-dot"></span>今日の学びを、未来に積み上げる</span>
+    <span class="live-badge"><span class="live-dot"></span>今日の勉強を、未来に積み上げる</span>
     <h1 class="hero-title"><span class="line">バーチャル自習室で</span><span class="line blue">今日も席につく。</span></h1>
-    <p class="hero-sub">
-  今この瞬間も、たくさんの仲間が勉強しています。<br>
-  <span class="no-break">誰かがいるから、自然と続く。</span>
-</p>
+    <p class="hero-sub">今この瞬間も、たくさんの仲間が席について勉強しています。 <br />誰かがいるから、自然と続く。</p>
 
     <div class="hero-cta-wrap">
       <button class="btn-cta" data-cta="hero">
@@ -385,14 +413,15 @@
 <section class="sec" style="padding-top:6px;">
   <div class="wrap">
     <div class="reveal"><span class="sec-kicker">After</span></div>
-    <h2 class="sec-title reveal">StudyHubが変えること</h2>
+    <h2 class="sec-title reveal">StudyHubが、変えること</h2>
     <p class="sec-lead reveal d1">「続ける」も「振り返る」も、ぜんぶ一緒に。<br />勉強を、ちゃんと前に進む力に変えます。</p>
 
     <div class="value">
       <div class="value-media reveal"><span class="vnum">1</span><img src="assets/together.png" alt="自習室で複数の仲間が勉強している様子" /></div>
       <div class="value-body reveal d1">
         <h3>仲間がいるから、続く</h3>
-        <p>同じ自習室で、今この瞬間も誰かが頑張っている。<br />その気配が、ひとりの夜を「続けられる夜」に変えます。</p>
+        <p>同じ自習室で、今この瞬間も誰かが頑張っている。
+<br />その気配が、ひとりの夜を「続けられる夜」に変えます。</p>
         <span class="value-chip"><span class="live-dot"></span>今 142人が勉強中</span>
       </div>
     </div>
@@ -401,7 +430,8 @@
       <div class="value-media reveal"><span class="vnum">2</span><img src="assets/ai-summary.png" alt="手書きのメモをAIが整理する様子" /></div>
       <div class="value-body reveal d1">
         <h3>AIが、勉強を整理してくれる</h3>
-        <p>終わったら、ひとことメモを渡すだけ。<br />「今日学んだこと・できるたこと」を<br />AIが自動でまとめます。</p>
+        <p>終わったら、ひとことメモを渡すだけ。
+AIが「今日学んだこと・できるようになったこと・次にやること」に自動でまとめます。</p>
         <span class="value-tag">メモを渡すだけ</span>
       </div>
     </div>
@@ -410,7 +440,8 @@
       <div class="value-media reveal"><span class="vnum">3</span><img src="assets/record.png" alt="積み重なった学習記録のイメージ" /></div>
       <div class="value-body reveal d1">
         <h3>頑張りが、将来の武器になる</h3>
-        <p>ためた記録は、就活のES・面接や、受験の自己PRに<br />そのまま使える素材に。PDFで書き出して持ち出せます。</p>
+        <p>ためた記録は、就活のES・面接や、受験の自己PRに
+<br />そのまま使える素材に。PDFで書き出して持ち出せます。</p>
         <span class="value-tag">PDFで書き出せる</span>
       </div>
     </div>
@@ -435,9 +466,10 @@
 <!-- ===== 事前登録 / クロージング ===== -->
 <section class="sec" style="padding-top:6px;">
   <div class="wrap">
-    <div class="closing reveal">
+    <div class="closing reveal" id="preregister">
       <h2>あなたの勉強を、<br /><span class="amber">続く力に。</span></h2>
-      <p>今夜も、自習室にはたくさんの仲間がいます。<br />あなたの席も、空けて待っています。</p>
+      <p>今夜も、自習室にはたくさんの仲間がいます。
+<br />あなたの席も、空けて待っています。</p>
       <span class="dev-note">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5l3 1.8"/></svg>
         StudyHubは現在開発中です
@@ -498,63 +530,58 @@
     document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
   })();
 
-  /* CTA -> GA event -> thanks modal / one click only */
+  /* CTA -> GA event -> thanks modal (one time only; persisted across visits) */
   (function(){
+    var KEY = 'studyhub_want_to_use_clicked';
     var modal = document.getElementById('thanksModal');
-    var CTA_STORAGE_KEY = 'studyhub_cta_clicked';
-
-    function openModal(){
-      modal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal(){
-      modal.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    function disableAllCtaButtons(){
-      document.querySelectorAll('.btn-cta').forEach(function(btn){
-        btn.disabled = true;
-        btn.setAttribute('aria-disabled', 'true');
-        btn.textContent = '送信済み';
+    function openModal(){ modal.classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeModal(){ modal.classList.remove('open'); document.body.style.overflow=''; }
+    var checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"></path></svg>';
+    function markSubmitted(){
+      document.querySelectorAll('.btn-cta').forEach(function(b){
+        b.disabled = true;
+        b.innerHTML = checkSvg + ' ありがとうございます！';
       });
     }
-
-    // すでに押したことがある場合は、ページ再読み込み後も押せないようにする
-    if (localStorage.getItem(CTA_STORAGE_KEY) === 'true') {
-      disableAllCtaButtons();
-    }
-
+    var alreadyClicked = false;
+    try { alreadyClicked = localStorage.getItem(KEY) === '1'; } catch(e){}
+    if(alreadyClicked){ markSubmitted(); }
     document.querySelectorAll('.btn-cta').forEach(function(btn){
       btn.addEventListener('click', function(){
-        if (localStorage.getItem(CTA_STORAGE_KEY) === 'true') {
-          return;
-        }
-
-        var loc = btn.getAttribute('data-cta') || 'unknown';
-
-        // 二重クリック防止
-        localStorage.setItem(CTA_STORAGE_KEY, 'true');
-        disableAllCtaButtons();
-
-        // Google AnalyticsにCTAクリックイベントを送信
-        if (typeof gtag === 'function') {
-          gtag('event', 'want_to_use_click', {
-            button_location: loc
-          });
-        }
-
+        if(btn.disabled) return;
+        var loc = btn.getAttribute('data-cta');
+        if(typeof gtag === 'function'){ gtag('event', 'want_to_use_click', { 'button_location': loc }); }
+        try { localStorage.setItem(KEY, '1'); } catch(e){}
+        markSubmitted();
         openModal();
       });
     });
-
     document.getElementById('modalClose').addEventListener('click', closeModal);
-    modal.addEventListener('click', function(e){
-      if(e.target === modal) closeModal();
-    });
-    document.addEventListener('keydown', function(e){
-      if(e.key === 'Escape') closeModal();
+    modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+  })();
+
+  /* header 「事前登録」 nav button — scroll only; fully independent of .btn-cta logic */
+  (function(){
+    var navBtn = document.getElementById('navPreRegister');
+    if(!navBtn) return;
+    navBtn.addEventListener('click', function(){
+      if(typeof gtag === 'function'){ gtag('event', 'preregister_nav_click', { 'location': 'header' }); }
+      var target = document.getElementById('preregister');
+      var header = document.querySelector('header.site');
+      if(!target) return;
+      var y = target.getBoundingClientRect().top + window.scrollY - (header ? header.offsetHeight : 0) - 14;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+      /* subtle one-shot glow on the email field once we arrive */
+      setTimeout(function(){
+        var input = document.querySelector('.pre-form input[type=email]');
+        if(input && input.offsetParent !== null){
+          input.classList.remove('flash');
+          void input.offsetWidth;
+          input.classList.add('flash');
+          setTimeout(function(){ input.classList.remove('flash'); }, 1700);
+        }
+      }, 850);
     });
   })();
 
