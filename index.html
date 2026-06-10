@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StudyHub — ひとりじゃない自習室で、今日も勉強。</title>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8RF9VRLN3W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8RF9VRLN3W');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<!-- if JS is disabled, never hide content -->
+<noscript><style>.reveal{opacity:1 !important;transform:none !important;}</style></noscript>
+
+<style>
+  :root{
+    /* bright, clean, community-blue palette (matches app icon) */
+    --bg:#eef4fc;
+    --paper:#ffffff;
+    --tint:#e7f0fd;
+    --tint-soft:#f2f7fe;
+    --blue:#2e6fd6;
+    --blue-bright:#3f86f0;
+    --blue-deep:#2360c4;
+    --ink:#16243c;
+    --ink-soft:#46566f;
+    --ink-mute:#7b89a1;
+    --line:#e2e9f4;
+    --line-blue:rgba(46,111,214,.18);
+    --amber:#f3a226;
+    --live:#22c55e;
+    --shadow-blue:rgba(35,96,196,.16);
+    --maxw:540px;
+    --pad:22px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Zen Kaku Gothic New","Noto Sans JP",sans-serif;
+    line-height:1.85;letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  img{display:block;max-width:100%;}
+
+  /* soft ambient blue wash behind hero */
+  .bg-field{position:absolute;top:0;left:0;right:0;height:1000px;z-index:0;pointer-events:none;overflow:hidden;}
+  .bg-field::before{
+    content:"";position:absolute;top:-260px;left:50%;transform:translateX(-50%);
+    width:760px;height:760px;border-radius:50%;
+    background:radial-gradient(closest-side, rgba(63,134,240,.20), transparent 70%);
+  }
+  .bg-field::after{
+    content:"";position:absolute;top:120px;left:-160px;
+    width:520px;height:520px;border-radius:50%;
+    background:radial-gradient(closest-side, rgba(46,111,214,.12), transparent 70%);
+  }
+
+  .wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad);}
+  section{position:relative;z-index:1;}
+
+  /* ---------- header ---------- */
+  header.site{
+    position:sticky;top:0;z-index:30;
+    background:rgba(238,244,252,.82);
+    backdrop-filter:saturate(140%) blur(12px);
+    border-bottom:1px solid rgba(226,233,244,.9);
+  }
+  .site-inner{
+    max-width:var(--maxw);margin:0 auto;padding:11px var(--pad);
+    display:flex;align-items:center;gap:11px;
+  }
+  .logo{width:34px;height:34px;border-radius:9px;flex:none;display:block;
+    box-shadow:0 4px 12px var(--shadow-blue);}
+  .logo-name{font-weight:700;font-size:18px;letter-spacing:.01em;color:var(--ink);}
+
+  /* ---------- buttons ---------- */
+  .btn-cta{
+    appearance:none;border:none;cursor:pointer;font-family:inherit;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    font-weight:700;font-size:17px;letter-spacing:.02em;color:#fff;
+    background:linear-gradient(165deg,var(--blue-bright),var(--blue-deep));
+    padding:18px 32px;border-radius:15px;
+    box-shadow:0 14px 30px -10px rgba(35,96,196,.6), inset 0 1px 0 rgba(255,255,255,.35);
+    transition:transform .16s cubic-bezier(.2,.7,.3,1), box-shadow .16s ease, filter .16s ease;
+  }
+  .btn-cta:hover{transform:translateY(-3px);box-shadow:0 20px 38px -10px rgba(35,96,196,.66), inset 0 1px 0 rgba(255,255,255,.4);filter:brightness(1.04);}
+  .btn-cta:active{transform:translateY(1px) scale(.985);box-shadow:0 7px 16px -8px rgba(35,96,196,.6), inset 0 1px 0 rgba(255,255,255,.35);}
+  .btn-cta svg{width:18px;height:18px;}
+  .cta-note{display:block;margin-top:13px;color:var(--ink-mute);font-size:12.5px;}
+
+  /* ---------- hero ---------- */
+  .hero{padding:46px 0 8px;text-align:center;}
+  .live-badge{
+    display:inline-flex;align-items:center;gap:9px;
+    padding:8px 16px;border-radius:999px;
+    background:var(--paper);border:1px solid var(--line);
+    color:#2f7d4e;font-size:13px;font-weight:700;letter-spacing:.01em;
+    box-shadow:0 6px 16px -8px var(--shadow-blue);
+  }
+  .live-dot{width:9px;height:9px;border-radius:50%;background:var(--live);flex:none;
+    box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:livePulse 2s ease-out infinite;}
+  @keyframes livePulse{
+    0%{box-shadow:0 0 0 0 rgba(34,197,94,.5);opacity:1;}
+    70%{box-shadow:0 0 0 7px rgba(34,197,94,0);opacity:.75;}
+    100%{box-shadow:0 0 0 0 rgba(34,197,94,0);opacity:1;}
+  }
+  h1.hero-title{
+    font-weight:900;font-size:clamp(26px,7.4vw,42px);line-height:1.32;
+    letter-spacing:.002em;margin:22px 0 0;color:var(--ink);
+  }
+  .hero-title .line{display:block;white-space:nowrap;}
+  .hero-title .blue{color:var(--blue);}
+  .hero-sub{color:var(--ink-soft);font-size:15.5px;line-height:1.95;
+    margin:18px auto 0;max-width:30em;text-wrap:pretty;}
+  .hero-cta-wrap{margin-top:30px;}
+
+  /* ---------- app screen frames ---------- */
+  .screens{margin-top:46px;display:grid;gap:22px;}
+  .screen-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:20px;
+    padding:14px;box-shadow:0 24px 50px -26px var(--shadow-blue);
+    position:relative;
+  }
+  .screen-tag{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.03em;white-space:nowrap;
+    background:var(--tint);border:1px solid var(--line-blue);
+    padding:5px 12px;border-radius:999px;margin-bottom:12px;
+  }
+  .screen-tag svg{width:13px;height:13px;}
+  .screen-card.web img{width:100%;border-radius:11px;display:block;
+    border:1px solid var(--line);}
+  .screen-card.ios{max-width:300px;margin:0 auto;}
+  .screen-card.ios img{width:100%;border-radius:13px;display:block;}
+  .screen-hint{color:var(--ink-mute);font-size:11.5px;margin:11px 2px 2px;letter-spacing:.02em;}
+
+  /* ---------- section heading ---------- */
+  .sec{padding:62px 0;}
+  .sec-kicker{
+    color:var(--blue);font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;justify-content:center;
+  }
+  .sec-kicker::before,.sec-kicker::after{content:"";height:2px;width:22px;border-radius:2px;background:var(--line-blue);}
+  h2.sec-title{text-align:center;font-weight:900;font-size:clamp(23px,6vw,29px);
+    line-height:1.5;margin:15px 0 0;text-wrap:balance;color:var(--ink);}
+  .sec-lead{text-align:center;color:var(--ink-soft);font-size:15px;margin:14px auto 0;max-width:28em;text-wrap:pretty;}
+
+  /* ---------- worries ---------- */
+  .worry-grid{display:grid;gap:14px;margin-top:34px;}
+  .worry{
+    background:var(--paper);border:1px solid var(--line);border-radius:18px;
+    padding:20px 22px;display:flex;align-items:center;gap:16px;
+    box-shadow:0 14px 30px -22px var(--shadow-blue);
+  }
+  .worry-ico{width:48px;height:48px;border-radius:13px;flex:none;
+    background:var(--tint);border:1px solid var(--line-blue);
+    display:grid;place-items:center;color:var(--blue);}
+  .worry-ico svg{width:24px;height:24px;}
+  .worry p{margin:0;font-size:15.5px;font-weight:500;line-height:1.7;color:var(--ink);}
+
+  /* ---------- value blocks ---------- */
+  .value{margin-top:40px;}
+  .value-media{position:relative;border-radius:20px;overflow:hidden;
+    border:1px solid var(--line);box-shadow:0 26px 52px -28px var(--shadow-blue);
+    aspect-ratio:4/3;background:var(--tint);}
+  .value-media img{width:100%;height:100%;object-fit:cover;}
+  .value-media .vnum{position:absolute;top:13px;left:13px;width:40px;height:40px;border-radius:12px;
+    background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:900;font-size:18px;
+    box-shadow:0 8px 18px -6px rgba(35,96,196,.7);border:2px solid rgba(255,255,255,.85);}
+  .value-body{margin-top:20px;text-align:center;}
+  .value-body h3{font-weight:900;font-size:21px;line-height:1.5;margin:0;text-wrap:balance;color:var(--ink);}
+  .value-body p{color:var(--ink-soft);font-size:15px;line-height:1.95;margin:11px auto 0;max-width:27em;text-wrap:pretty;}
+  .value-chip{display:inline-flex;align-items:center;gap:8px;margin-top:15px;
+    font-size:12.5px;font-weight:700;color:#2f7d4e;background:#eaf8ef;border:1px solid #bfe8cd;
+    padding:7px 14px;border-radius:999px;}
+  .value-chip .live-dot{width:8px;height:8px;}
+  .value-tag{display:inline-flex;align-items:center;gap:8px;margin-top:15px;
+    font-size:12.5px;font-weight:700;color:var(--blue);background:var(--tint);border:1px solid var(--line-blue);
+    padding:7px 14px;border-radius:999px;}
+
+  /* ---------- steps ---------- */
+  .step-flow{display:grid;gap:12px;margin-top:36px;}
+  .step{background:var(--paper);border:1px solid var(--line);border-radius:18px;
+    padding:22px;display:flex;align-items:center;gap:18px;box-shadow:0 14px 30px -24px var(--shadow-blue);}
+  .step-num{width:48px;height:48px;flex:none;border-radius:50%;display:grid;place-items:center;
+    font-weight:900;font-size:20px;color:#fff;background:linear-gradient(160deg,var(--blue-bright),var(--blue-deep));
+    box-shadow:0 8px 18px -6px rgba(35,96,196,.6), inset 0 1px 0 rgba(255,255,255,.35);}
+  .step-txt h4{margin:0;font-size:16.5px;font-weight:700;color:var(--ink);}
+  .step-txt p{margin:5px 0 0;color:var(--ink-mute);font-size:13.5px;line-height:1.7;}
+  .step-connector{width:2px;height:13px;margin:-6px 0 -6px 45px;border-radius:2px;
+    background:linear-gradient(180deg,var(--blue),transparent);opacity:.5;}
+
+  /* ---------- pre-register / closing ---------- */
+  .closing{
+    margin:24px 0 0;padding:54px 26px 50px;border-radius:28px;text-align:center;
+    background:linear-gradient(165deg,#3a7ce0,#2360c4);
+    color:#fff;box-shadow:0 34px 70px -30px rgba(35,96,196,.7);overflow:hidden;position:relative;
+  }
+  .closing::before{content:"";position:absolute;top:-120px;right:-90px;width:300px;height:300px;border-radius:50%;
+    background:radial-gradient(closest-side, rgba(255,255,255,.16), transparent 70%);}
+  .closing h2{font-weight:900;font-size:clamp(25px,7vw,32px);line-height:1.45;margin:0;text-wrap:balance;position:relative;}
+  .closing h2 .amber{color:#ffd58a;}
+  .closing > p{color:rgba(255,255,255,.9);font-size:15px;margin:15px auto 0;max-width:24em;text-wrap:pretty;position:relative;}
+  .dev-note{margin-top:20px;display:inline-flex;align-items:center;gap:8px;font-size:12.5px;
+    color:rgba(255,255,255,.92);background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);
+    padding:7px 15px;border-radius:999px;position:relative;}
+  .closing .btn-cta{
+    background:#fff;color:var(--blue-deep);margin-top:26px;
+    box-shadow:0 14px 28px -10px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.6);
+  }
+  .closing .btn-cta:hover{filter:brightness(1);background:#f4f8ff;}
+  .closing .btn-cta svg path{fill:var(--blue-deep);}
+
+  /* divider in closing */
+  .or-split{display:flex;align-items:center;gap:14px;margin:30px auto 0;max-width:330px;position:relative;
+    color:rgba(255,255,255,.7);font-size:12px;font-weight:700;letter-spacing:.06em;}
+  .or-split::before,.or-split::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.28);}
+
+  /* email form */
+  .pre-form{position:relative;max-width:380px;margin:20px auto 0;text-align:left;}
+  .pre-form .field-row{display:flex;flex-direction:column;gap:10px;}
+  .pre-form input[type=email]{
+    width:100%;font-family:inherit;font-size:16px;color:var(--ink);
+    background:#fff;border:1px solid rgba(255,255,255,.5);border-radius:13px;
+    padding:15px 16px;outline:none;box-shadow:0 8px 20px -12px rgba(0,0,0,.3);
+    transition:box-shadow .16s ease;
+  }
+  .pre-form input[type=email]::placeholder{color:#9aa6bb;}
+  .pre-form input[type=email]:focus{box-shadow:0 0 0 4px rgba(255,255,255,.28);}
+  .pre-form button[type=submit]{
+    appearance:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:16px;
+    color:var(--blue-deep);background:#ffd58a;border:none;border-radius:13px;padding:16px;
+    box-shadow:0 12px 24px -10px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.5);
+    transition:transform .16s ease, filter .16s ease;
+  }
+  .pre-form button[type=submit]:hover{filter:brightness(1.04);transform:translateY(-2px);}
+  .pre-form button[type=submit]:active{transform:translateY(1px) scale(.99);}
+  .pre-form button[type=submit][disabled]{opacity:.6;cursor:default;transform:none;}
+  .form-note{color:rgba(255,255,255,.82);font-size:12px;margin:12px 2px 0;line-height:1.7;text-align:center;}
+  .form-error{color:#ffe0e0;font-size:12.5px;margin:10px 2px 0;text-align:center;display:none;}
+  .form-done{display:none;margin-top:6px;text-align:center;}
+  .form-done .fd-check{width:54px;height:54px;margin:0 auto 10px;border-radius:50%;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.45);display:grid;place-items:center;}
+  .form-done .fd-check svg{width:28px;height:28px;color:#fff;}
+  .form-done strong{display:block;font-size:17px;font-weight:900;color:#fff;}
+  .form-done span{display:block;color:rgba(255,255,255,.88);font-size:13.5px;margin-top:6px;}
+
+  /* ---------- footer ---------- */
+  footer{text-align:center;padding:44px var(--pad) 52px;border-top:1px solid var(--line);margin-top:60px;position:relative;z-index:1;}
+  .foot-brand{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:16px;color:var(--ink);}
+  .foot-brand img{width:26px;height:26px;border-radius:7px;}
+  .foot-copy{margin-top:11px;color:var(--ink-mute);font-size:12px;letter-spacing:.03em;}
+
+  /* ---------- modal ---------- */
+  .modal-scrim{position:fixed;inset:0;z-index:50;background:rgba(20,36,60,.5);backdrop-filter:blur(5px);
+    display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s ease;}
+  .modal-scrim.open{opacity:1;pointer-events:auto;}
+  .modal{width:100%;max-width:360px;text-align:center;background:#fff;border-radius:24px;padding:38px 28px 30px;
+    box-shadow:0 40px 80px -24px rgba(20,36,60,.5);
+    transform:translateY(16px) scale(.96);opacity:0;transition:transform .34s cubic-bezier(.2,.8,.25,1), opacity .34s ease;}
+  .modal-scrim.open .modal{transform:none;opacity:1;}
+  .modal-check{width:70px;height:70px;margin:0 auto;border-radius:50%;background:#eaf8ef;border:1px solid #bfe8cd;display:grid;place-items:center;}
+  .modal-check svg{width:34px;height:34px;color:var(--live);}
+  .modal h3{font-weight:900;font-size:21px;margin:18px 0 0;color:var(--ink);}
+  .modal p{color:var(--ink-soft);font-size:14.5px;line-height:1.9;margin:11px 0 0;text-wrap:pretty;}
+  .modal-close{appearance:none;border:none;cursor:pointer;font-family:inherit;margin-top:24px;width:100%;padding:15px;border-radius:13px;
+    font-weight:700;font-size:15.5px;color:#fff;background:linear-gradient(165deg,var(--blue-bright),var(--blue-deep));
+    transition:filter .15s ease,transform .15s ease;}
+  .modal-close:hover{filter:brightness(1.05);}
+  .modal-close:active{transform:scale(.98);}
+
+  /* ---------- scroll reveal ---------- */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.3,1), transform .8s cubic-bezier(.2,.7,.3,1);}
+  .reveal.in{opacity:1;transform:none;}
+  .reveal.d1{transition-delay:.08s;}
+  .reveal.d2{transition-delay:.16s;}
+  .reveal.d3{transition-delay:.24s;}
+
+  /* hero load-in: base = visible end-state; animate FROM hidden */
+  .hero .live-badge,.hero h1,.hero .hero-sub,.hero .hero-cta-wrap,.hero .screens{
+    animation:heroIn .9s cubic-bezier(.2,.7,.3,1) both;
+  }
+  .hero .live-badge{animation-delay:.12s;}
+  .hero h1{animation-delay:.24s;}
+  .hero .hero-sub{animation-delay:.38s;}
+  .hero .hero-cta-wrap{animation-delay:.52s;}
+  .hero .screens{animation-delay:.66s;}
+  @keyframes heroIn{from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:none;}}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;}
+    .reveal{opacity:1 !important;transform:none !important;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== header ===== -->
+<header class="site">
+  <div class="site-inner">
+    <img class="logo" src="assets/logo.png" alt="StudyHub アイコン" />
+    <span class="logo-name">StudyHub</span>
+  </div>
+</header>
+
+<div style="position:relative;">
+<div class="bg-field"></div>
+
+<!-- ===== hero ===== -->
+<section class="hero">
+  <div class="wrap">
+    <span class="live-badge"><span class="live-dot"></span>今日の学びを、未来に積み上げる</span>
+    <h1 class="hero-title"><span class="line">バーチャル自習室で</span><span class="line blue">今日も席につく。</span></h1>
+    <p class="hero-sub">
+  今この瞬間も、たくさんの仲間が勉強しています。<br>
+  <span class="no-break">誰かがいるから、自然と続く。</span>
+</p>
+
+    <div class="hero-cta-wrap">
+      <button class="btn-cta" data-cta="hero">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M8 5.5v13l10-6.5-10-6.5Z" fill="#fff"/></svg>
+        自習室に入ってみたい
+      </button>
+      <span class="cta-note">※ メール登録は不要です</span>
+    </div>
+
+    <div class="screens">
+      <div class="screen-card web">
+        <span class="screen-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 21h8"/></svg>
+          Webアプリ版
+        </span>
+        <img src="assets/web-screen.png" alt="StudyHub Webアプリ版の画面イメージ" />
+        <p class="screen-hint">▲ Webアプリ版の画面イメージ（開発中・実際の画面とは異なります）</p>
+      </div>
+
+      <div class="screen-card ios">
+        <span class="screen-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 18.5h3"/></svg>
+          iOSアプリ版
+        </span>
+        <img src="assets/app-screen.png" alt="StudyHub iOSアプリ版の画面イメージ" />
+        <p class="screen-hint">▲ iOSアプリ版の画面イメージ（開発中・実際の画面とは異なります）</p>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ===== 悩み ===== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="reveal"><span class="sec-kicker">Before</span></div>
+    <h2 class="sec-title reveal">こんな悩み、ありませんか？</h2>
+    <div class="worry-grid">
+      <div class="worry reveal d1">
+        <span class="worry-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 3-4.6 5.5-4.6S13.9 16 14.5 19"/><path d="M17 9.2a3 3 0 1 0-1.2-2.4"/><path d="M16 14.6c2.2.3 4 1.9 4.5 4.4"/></svg></span>
+        <p>一人だと勉強が続かない</p>
+      </div>
+      <div class="worry reveal d2">
+        <span class="worry-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7.5"/><path d="M12 13V9"/><path d="M9.5 2.5h5"/></svg></span>
+        <p>タイマーだけでは物足りない</p>
+      </div>
+      <div class="worry reveal d3">
+        <span class="worry-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 12.5h6M9 16h3.5"/></svg></span>
+        <p>頑張ったのに、何をやったか思い出せない</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 価値 ===== -->
+<section class="sec" style="padding-top:6px;">
+  <div class="wrap">
+    <div class="reveal"><span class="sec-kicker">After</span></div>
+    <h2 class="sec-title reveal">StudyHubが変えること</h2>
+    <p class="sec-lead reveal d1">「続ける」も「振り返る」も、ぜんぶ一緒に。<br />勉強を、ちゃんと前に進む力に変えます。</p>
+
+    <div class="value">
+      <div class="value-media reveal"><span class="vnum">1</span><img src="assets/together.png" alt="自習室で複数の仲間が勉強している様子" /></div>
+      <div class="value-body reveal d1">
+        <h3>仲間がいるから、続く</h3>
+        <p>同じ自習室で、今この瞬間も誰かが頑張っている。<br />その気配が、ひとりの夜を「続けられる夜」に変えます。</p>
+        <span class="value-chip"><span class="live-dot"></span>今 142人が勉強中</span>
+      </div>
+    </div>
+
+    <div class="value">
+      <div class="value-media reveal"><span class="vnum">2</span><img src="assets/ai-summary.png" alt="手書きのメモをAIが整理する様子" /></div>
+      <div class="value-body reveal d1">
+        <h3>AIが、勉強を整理してくれる</h3>
+        <p>終わったら、ひとことメモを渡すだけ。<br />「今日学んだこと・できるたこと」を<br />AIが自動でまとめます。</p>
+        <span class="value-tag">メモを渡すだけ</span>
+      </div>
+    </div>
+
+    <div class="value">
+      <div class="value-media reveal"><span class="vnum">3</span><img src="assets/record.png" alt="積み重なった学習記録のイメージ" /></div>
+      <div class="value-body reveal d1">
+        <h3>頑張りが、将来の武器になる</h3>
+        <p>ためた記録は、就活のES・面接や、受験の自己PRに<br />そのまま使える素材に。PDFで書き出して持ち出せます。</p>
+        <span class="value-tag">PDFで書き出せる</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ステップ ===== -->
+<section class="sec" style="padding-top:6px;">
+  <div class="wrap">
+    <div class="reveal"><span class="sec-kicker">How it works</span></div>
+    <h2 class="sec-title reveal">使い方は、かんたん3ステップ</h2>
+    <div class="step-flow">
+      <div class="step reveal d1"><span class="step-num">1</span><div class="step-txt"><h4>席につく</h4><p>自習室に入って、集中タイマーをスタート。</p></div></div>
+      <div class="step-connector reveal d1"></div>
+      <div class="step reveal d2"><span class="step-num">2</span><div class="step-txt"><h4>終わったらメモ</h4><p>今日やったことを、ひとことだけ書き残す。</p></div></div>
+      <div class="step-connector reveal d2"></div>
+      <div class="step reveal d3"><span class="step-num">3</span><div class="step-txt"><h4>AIが整理して記録に</h4><p>まとめが自動で作られ、あなたの記録に積み上がる。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 事前登録 / クロージング ===== -->
+<section class="sec" style="padding-top:6px;">
+  <div class="wrap">
+    <div class="closing reveal">
+      <h2>あなたの勉強を、<br /><span class="amber">続く力に。</span></h2>
+      <p>今夜も、自習室にはたくさんの仲間がいます。<br />あなたの席も、空けて待っています。</p>
+      <span class="dev-note">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5l3 1.8"/></svg>
+        StudyHubは現在開発中です
+      </span>
+
+      <div class="hero-cta-wrap" style="margin-top:0;">
+        <button class="btn-cta" data-cta="closing">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M8 5.5v13l10-6.5-10-6.5Z"/></svg>
+          自習室に入ってみたい
+        </button>
+      </div>
+
+      <div class="or-split">または</div>
+
+      <form class="pre-form" id="preForm" action="https://formspree.io/f/xvznqbrj" method="POST">
+        <div class="field-row">
+          <input type="email" name="email" required placeholder="メールアドレスを入力" autocomplete="email" />
+          <button type="submit">事前登録する</button>
+        </div>
+        <p class="form-note">登録すると、リリース時にお知らせが届きます。</p>
+        <p class="form-error" id="formError">うまく送信できませんでした。少し時間をおいて、もう一度お試しください。</p>
+      </form>
+
+      <div class="form-done" id="formDone">
+        <div class="fd-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"/></svg></div>
+        <strong>登録ありがとうございます！</strong>
+        <span>リリースしたら、まっさきにお知らせします。</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== footer ===== -->
+<footer>
+  <span class="foot-brand"><img src="assets/logo.png" alt="StudyHub アイコン" />StudyHub</span>
+  <div class="foot-copy">© 2026 StudyHub</div>
+</footer>
+
+<!-- ===== modal ===== -->
+<div class="modal-scrim" id="thanksModal" role="dialog" aria-modal="true" aria-labelledby="thanksTitle">
+  <div class="modal">
+    <div class="modal-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"/></svg></div>
+    <h3 id="thanksTitle">ありがとうございます！</h3>
+    <p>リリースしたら、まっさきにお知らせします。<br />あなたの席を、用意して待っています。</p>
+    <button class="modal-close" id="modalClose">閉じる</button>
+  </div>
+</div>
+
+<script>
+  /* scroll reveal — re-fires every time elements enter the viewport */
+  (function(){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); }
+        else { e.target.classList.remove('in'); }
+      });
+    }, { threshold:0.16, rootMargin:'0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  })();
+
+  /* CTA -> GA event -> thanks modal */
+  (function(){
+    var modal = document.getElementById('thanksModal');
+    function openModal(){ modal.classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeModal(){ modal.classList.remove('open'); document.body.style.overflow=''; }
+    document.querySelectorAll('.btn-cta').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var loc = btn.getAttribute('data-cta');
+        if(typeof gtag === 'function'){ gtag('event', 'want_to_use_click', { 'button_location': loc }); }
+        openModal();
+      });
+    });
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+  })();
+
+  /* email pre-registration -> Formspree (AJAX) -> inline success */
+  (function(){
+    var form = document.getElementById('preForm');
+    var done = document.getElementById('formDone');
+    var err  = document.getElementById('formError');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      err.style.display = 'none';
+      var btn = form.querySelector('button[type=submit]');
+      btn.disabled = true; btn.textContent = '送信中…';
+      fetch(form.action, { method:'POST', body:new FormData(form), headers:{ 'Accept':'application/json' } })
+        .then(function(res){
+          if(res.ok){
+            if(typeof gtag === 'function'){ gtag('event', 'preregister_submit', { 'method':'email' }); }
+            form.style.display = 'none';
+            done.style.display = 'block';
+          } else {
+            throw new Error('bad response');
+          }
+        })
+        .catch(function(){
+          btn.disabled = false; btn.textContent = '事前登録する';
+          err.style.display = 'block';
+        });
+    });
+  })();
+</script>
+</body>
+</html>
